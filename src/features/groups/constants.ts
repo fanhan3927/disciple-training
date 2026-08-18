@@ -1,0 +1,7 @@
+export const LEADER_COVENANT_VERSION = "2026-07-30.m2";
+export const DEFAULT_MEMBER_LIMIT = 8;
+export const MAX_MEMBER_LIMIT = 20;
+export const DEFAULT_INVITE_EXPIRES_HOURS = 72;
+export const MAX_INVITE_EXPIRES_DAYS = 30;
+export const DEFAULT_INVITE_MAX_USES = 1;
+export const MAX_INVITE_MAX_USES = 100;
