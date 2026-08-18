@@ -3,6 +3,14 @@ type NoticeBannerProps = {
 };
 
 const messages: Record<string, string> = {
+  "post-created": "讨论已发布。",
+  "comment-created": "回应已发布。",
+  "reaction-updated": "互动已更新。",
+  "post-updated": "讨论状态已更新。",
+  "prayer-created": "代祷请求已保存。",
+  "prayer-updated": "代祷状态已更新。",
+  "prayer-responded": "回应已记录。",
+  "notification-read": "通知已标记为已读。",
   "check-email": "如果邮箱需要验证，请先查收邮件并完成确认。",
   "signed-out": "已退出登录。",
   "reset-sent": "如果该邮箱可用，密码恢复邮件将会发送。",
@@ -26,6 +34,7 @@ const messages: Record<string, string> = {
 };
 
 const errors: Record<string, string> = {
+  "rate-limit": "操作太频繁，请稍后再试。",
   config: "Supabase 环境变量未配置，认证流程暂不可用。",
   invalid: "表单内容不完整，请检查后重试。",
   auth: "无法完成认证请求，请稍后重试。",
