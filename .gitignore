@@ -8,3 +8,6 @@ test-results
 .env*.local
 *.tsbuildinfo
 *.log
+
+.vercel
+.env*

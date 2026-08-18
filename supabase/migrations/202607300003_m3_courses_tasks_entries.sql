@@ -598,7 +598,7 @@ lesson_rows as (
   on conflict (module_id, sequence) do update
     set title = excluded.title,
         local_church_notice = excluded.local_church_notice
-  returning id, module_id, title
+  returning id, module_id
 ),
 block_rows as (
   insert into public.content_blocks (
@@ -641,7 +641,7 @@ insert into public.tasks (lesson_id, task_type, title, prompt_json, is_core, seq
 select
   lesson_rows.id,
   task_type::public.task_type,
-  title,
+  task_seed.title,
   jsonb_build_object('prompt', prompt),
   true,
   task_sequence,

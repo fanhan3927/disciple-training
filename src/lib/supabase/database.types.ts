@@ -34,6 +34,20 @@ export type EntryType = "reflection" | "devotional_note" | "prayer" | "testimony
 export type EntryVisibility = "private" | "leader_only" | "group";
 export type EntryStatus = "active" | "deleted";
 export type ShareScope = "leader_only" | "group";
+export type DiscussionPostStatus = "active" | "hidden" | "deleted";
+export type CommentStatus = "active" | "hidden" | "deleted";
+export type ReactionType = "encouragement" | "prayer";
+export type PrayerVisibility = "private" | "leader_only" | "group";
+export type PrayerStatus = "open" | "continued" | "ended" | "responded";
+export type PrayerResponseType = "prayed" | "encouragement";
+export type NotificationType = "discussion_reply" | "prayer_response" | "weekly_reminder";
+export type AiRiskCategory = "normal" | "doctrine_core" | "denominational" | "divine_guidance" | "sacrament" | "mental_health" | "self_harm" | "abuse" | "financial_exploitation" | "other_high_risk" | "prompt_injection";
+export type AiGroundingStatus = "grounded" | "partial" | "insufficient";
+export type AiMessageRole = "user" | "assistant" | "system";
+export type ReportTargetType = "post" | "comment" | "prayer" | "member" | "group";
+export type ReportStatus = "open" | "in_review" | "resolved" | "dismissed";
+export type SafetyCaseStatus = "open" | "triage" | "active" | "resolved" | "closed";
+export type UserRightsRequestStatus = "requested" | "processing" | "completed" | "cancelled";
 
 export type Database = {
   public: {
@@ -545,6 +559,240 @@ export type Database = {
         };
         Relationships: [];
       };
+      group_posts: {
+        Row: {
+          id: string;
+          group_id: string;
+          author_id: string;
+          week_number: number | null;
+          title: string;
+          body: string;
+          status: DiscussionPostStatus;
+          created_at: string;
+          updated_at: string;
+          hidden_at: string | null;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          group_id: string;
+          author_id: string;
+          week_number?: number | null;
+          title: string;
+          body: string;
+          status?: DiscussionPostStatus;
+          created_at?: string;
+          updated_at?: string;
+          hidden_at?: string | null;
+          deleted_at?: string | null;
+        };
+        Update: {
+          title?: string;
+          body?: string;
+          status?: DiscussionPostStatus;
+          updated_at?: string;
+          hidden_at?: string | null;
+          deleted_at?: string | null;
+        };
+        Relationships: [];
+      };
+      comments: {
+        Row: {
+          id: string;
+          post_id: string;
+          author_id: string;
+          body: string;
+          status: CommentStatus;
+          created_at: string;
+          updated_at: string;
+          hidden_at: string | null;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          post_id: string;
+          author_id: string;
+          body: string;
+          status?: CommentStatus;
+          created_at?: string;
+          updated_at?: string;
+          hidden_at?: string | null;
+          deleted_at?: string | null;
+        };
+        Update: {
+          body?: string;
+          status?: CommentStatus;
+          updated_at?: string;
+          hidden_at?: string | null;
+          deleted_at?: string | null;
+        };
+        Relationships: [];
+      };
+      reactions: {
+        Row: {
+          id: string;
+          post_id: string | null;
+          comment_id: string | null;
+          user_id: string;
+          reaction_type: ReactionType;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          post_id?: string | null;
+          comment_id?: string | null;
+          user_id: string;
+          reaction_type: ReactionType;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      prayer_requests: {
+        Row: {
+          id: string;
+          group_id: string;
+          author_id: string;
+          title: string;
+          body: string;
+          visibility: PrayerVisibility;
+          status: PrayerStatus;
+          expires_at: string | null;
+          created_at: string;
+          updated_at: string;
+          ended_at: string | null;
+          responded_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          group_id: string;
+          author_id: string;
+          title: string;
+          body: string;
+          visibility?: PrayerVisibility;
+          status?: PrayerStatus;
+          expires_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          ended_at?: string | null;
+          responded_at?: string | null;
+        };
+        Update: {
+          title?: string;
+          body?: string;
+          visibility?: PrayerVisibility;
+          status?: PrayerStatus;
+          expires_at?: string | null;
+          updated_at?: string;
+          ended_at?: string | null;
+          responded_at?: string | null;
+        };
+        Relationships: [];
+      };
+      prayer_responses: {
+        Row: {
+          id: string;
+          request_id: string;
+          responder_id: string;
+          response_type: PrayerResponseType;
+          body: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          request_id: string;
+          responder_id: string;
+          response_type: PrayerResponseType;
+          body?: string | null;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      notifications: {
+        Row: {
+          id: string;
+          user_id: string;
+          group_id: string | null;
+          notification_type: NotificationType;
+          post_id: string | null;
+          comment_id: string | null;
+          prayer_request_id: string | null;
+          metadata: Json;
+          read_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          group_id?: string | null;
+          notification_type: NotificationType;
+          post_id?: string | null;
+          comment_id?: string | null;
+          prayer_request_id?: string | null;
+          metadata?: Json;
+          read_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          read_at?: string | null;
+        };
+        Relationships: [];
+      };
+      knowledge_chunks: {
+        Row: { id: string; content_block_id: string; chunk_text: string; source_locator: string; embedding: Json | null; status: string; created_at: string };
+        Insert: { id?: string; content_block_id: string; chunk_text: string; source_locator: string; embedding?: Json | null; status?: string; created_at?: string };
+        Update: { chunk_text?: string; source_locator?: string; embedding?: Json | null; status?: string };
+        Relationships: [];
+      };
+      ai_threads: {
+        Row: { id: string; user_id: string; title: string; include_private_content: boolean; status: string; created_at: string; deleted_at: string | null };
+        Insert: { id?: string; user_id: string; title?: string; include_private_content?: boolean; status?: string; created_at?: string; deleted_at?: string | null };
+        Update: { title?: string; status?: string; deleted_at?: string | null };
+        Relationships: [];
+      };
+      ai_messages: {
+        Row: { id: string; thread_id: string; role: AiMessageRole; body: string; risk_category: AiRiskCategory; grounding_status: AiGroundingStatus; citations: Json; created_at: string };
+        Insert: { id?: string; thread_id: string; role: AiMessageRole; body: string; risk_category?: AiRiskCategory; grounding_status?: AiGroundingStatus; citations?: Json; created_at?: string };
+        Update: never;
+        Relationships: [];
+      };
+      reports: {
+        Row: { id: string; reporter_id: string; group_id: string; target_type: ReportTargetType; target_id: string; category: string; details: string; status: ReportStatus; created_at: string; updated_at: string };
+        Insert: { id?: string; reporter_id: string; group_id: string; target_type: ReportTargetType; target_id: string; category: string; details?: string; status?: ReportStatus; created_at?: string; updated_at?: string };
+        Update: never;
+        Relationships: [];
+      };
+      safety_cases: {
+        Row: { id: string; report_id: string | null; group_id: string | null; status: SafetyCaseStatus; severity: string; assigned_to: string | null; resolution_note: string; created_at: string; updated_at: string };
+        Insert: { id?: string; report_id?: string | null; group_id?: string | null; status?: SafetyCaseStatus; severity?: string; assigned_to?: string | null; resolution_note?: string; created_at?: string; updated_at?: string };
+        Update: { status?: SafetyCaseStatus; severity?: string; assigned_to?: string | null; resolution_note?: string; updated_at?: string };
+        Relationships: [];
+      };
+      safety_case_access: {
+        Row: { case_id: string; user_id: string; access_reason: string; granted_at: string; revoked_at: string | null };
+        Insert: { case_id: string; user_id: string; access_reason: string; granted_at?: string; revoked_at?: string | null };
+        Update: { revoked_at?: string | null };
+        Relationships: [];
+      };
+      audit_events: {
+        Row: { id: string; actor_id: string | null; target_user_id: string | null; group_id: string | null; event_type: string; target_type: string | null; target_id: string | null; metadata: Json; created_at: string };
+        Insert: { id?: string; actor_id?: string | null; target_user_id?: string | null; group_id?: string | null; event_type: string; target_type?: string | null; target_id?: string | null; metadata?: Json; created_at?: string };
+        Update: never;
+        Relationships: [];
+      };
+      data_export_requests: {
+        Row: { id: string; user_id: string; status: UserRightsRequestStatus; requested_at: string; completed_at: string | null; download_expires_at: string | null };
+        Insert: { id?: string; user_id: string; status?: UserRightsRequestStatus; requested_at?: string; completed_at?: string | null; download_expires_at?: string | null };
+        Update: never;
+        Relationships: [];
+      };
+      account_deletion_requests: {
+        Row: { id: string; user_id: string; status: UserRightsRequestStatus; requested_at: string; cooldown_until: string; completed_at: string | null };
+        Insert: { id?: string; user_id: string; status?: UserRightsRequestStatus; requested_at?: string; cooldown_until?: string; completed_at?: string | null };
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -632,6 +880,20 @@ export type Database = {
       entry_visibility: EntryVisibility;
       entry_status: EntryStatus;
       share_scope: ShareScope;
+      discussion_post_status: DiscussionPostStatus;
+      comment_status: CommentStatus;
+      reaction_type: ReactionType;
+      prayer_visibility: PrayerVisibility;
+      prayer_status: PrayerStatus;
+      prayer_response_type: PrayerResponseType;
+      notification_type: NotificationType;
+      ai_risk_category: AiRiskCategory;
+      ai_grounding_status: AiGroundingStatus;
+      ai_message_role: AiMessageRole;
+      report_target_type: ReportTargetType;
+      report_status: ReportStatus;
+      safety_case_status: SafetyCaseStatus;
+      user_rights_request_status: UserRightsRequestStatus;
     };
     CompositeTypes: Record<string, never>;
   };

@@ -54,6 +54,9 @@ export default async function GroupPage({ params, searchParams }: GroupPageProps
           <Link className="rounded-md border border-mist bg-white px-3 py-2 font-semibold hover:border-pine" href={`/groups/${group.id}/settings`}>
             设置
           </Link>
+          <Link className="rounded-md border border-mist bg-white px-3 py-2 font-semibold hover:border-pine" href={`/groups/${group.id}/discussion`}>讨论</Link>
+          <Link className="rounded-md border border-mist bg-white px-3 py-2 font-semibold hover:border-pine" href={`/groups/${group.id}/prayer`}>代祷</Link>
+          {isLeader ? <Link className="rounded-md border border-mist bg-white px-3 py-2 font-semibold hover:border-pine" href={`/groups/${group.id}/leader`}>Leader 面板</Link> : null}
         </nav>
       </div>
       <NoticeBanner searchParams={searchParams} />
